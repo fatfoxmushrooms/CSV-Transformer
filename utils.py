@@ -26,11 +26,17 @@ def process_csv_data(df):
             'Next Day - Tracked 24': 'TPN24'
         }).fillna('')  # Fill NaN values with an empty string
 
-    # 6. Rename 'Delivery zip/postal code' to 'Delivery ZIP/postal code' if it exists
+    # 6. Update 'Recipient name' with 'Recipient Full Name' if it's not empty
+    if 'Recipient Full Name' in df.columns and 'Recipient name' in df.columns:
+        df['Recipient name'] = df.apply(
+            lambda row: row['Recipient Full Name'] if row['Recipient Full Name'] else row['Recipient name'], axis=1
+        )
+
+    # 7. Rename 'Delivery zip/postal code' to 'Delivery ZIP/postal code' if it exists
     if 'Delivery zip/postal code' in df.columns:
         df.rename(columns={'Delivery zip/postal code': 'Delivery ZIP/postal code'}, inplace=True)
 
-    # 7. Reorder columns
+    # 8. Reorder columns
     desired_order = [
         'Order number', 'Date created', 'Total order quantity', 'Contact email', 'Note from customer',
         'Item', 'Variant', 'SKU', 'Qty', 'Quantity refunded', 'Price', 'Weight', 'Custom text',
@@ -47,7 +53,6 @@ def adjust_all_columns_to_string(df):
     df = df.where(pd.notnull(df), '')
     # Convert all columns to string
     return df.astype(str)
-
 
 # Function to convert DataFrame to CSV
 def convert_df_to_csv(df):
