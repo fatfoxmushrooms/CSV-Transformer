@@ -7,7 +7,8 @@ def process_csv_data(df):
         df['Custom text'] = ''
 
     # 2. Remove quotation marks from strings in the DataFrame
-    df = df.applymap(lambda x: x.replace('"', '') if isinstance(x, str) else x)
+    for col in df.select_dtypes(include="object"):
+        df[col] = df[col].str.replace('"', '', regex=False)
 
     # 3. Add a new column 'Parcel Size' and populate it with the value 'Parcel'
     df['Parcel Size'] = 'Parcel'
