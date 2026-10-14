@@ -25,6 +25,7 @@ def process_csv_data(df):
         df['Service Code'] = df['Delivery method'].map({
             '2 - 4 Business Days': 'TPS48',
             'Royal Mail Tracked 24': 'TPN24'
+            'Next Day - Tracked 24': 'TPN24'
         }).fillna('')  # Fill NaN values with an empty string
 
     # 6. Update 'Recipient name' with 'Recipient Full Name' if it's not empty
